@@ -924,6 +924,11 @@ def shared_db_changed(relation_id=None, unit=None):
                 level=DEBUG)
 
         if return_data:
+            # NOTE: (gabriel1109) If wait-timeout is set, then propagate
+            # in shared-db relation so that related applications update
+            # timeout as well
+            if config('wait-timeout'):
+                return_data.update(wait_timeout=config('wait-timeout'))
             peer_store_and_set(relation_id=relation_id, db_host=db_host,
                                **return_data)
         else:
